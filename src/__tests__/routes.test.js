@@ -1,7 +1,7 @@
 const { deepStrictEqual } = require('assert')
 
 const request = require('supertest') 
-const server = require('../index')
+const server = require('../app')
 
 describe('Routes / ', () => {
 
