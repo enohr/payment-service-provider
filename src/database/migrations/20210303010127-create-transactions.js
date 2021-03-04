@@ -10,6 +10,10 @@ module.exports = {
             allowNull: false,
             autoIncrement: true,
         },
+        transaction_price: {
+            type: Sequelize.DataTypes.INTEGER,
+            allowNull: false,
+        },
         transaction_description: {
             type: Sequelize.DataTypes.STRING,
             allowNull: false,
@@ -18,27 +22,24 @@ module.exports = {
             type: Sequelize.DataTypes.ENUM('debit', 'credit'),
             allowNull: false,
         },
-        card_last_digts: {
+        card_last_digits: {
             type: Sequelize.DataTypes.INTEGER,
             allowNull: false,
-            validate: {
-                min: 4,
-                max: 4
-            }
         },
         card_owner_name: {
             type: Sequelize.DataTypes.STRING,
             allowNull: false,
         },
         card_valid_date: {
-            type: Sequelize.DATE,
+            type: Sequelize.DataTypes.DATE,
             allowNull: false,
         },
         cvv: {
             type: Sequelize.DataTypes.INTEGER,
             allowNull: false,
         },
-
+        createdAt: Sequelize.DATE,
+        updatedAt: Sequelize.DATE,
     })
   },
 

@@ -1,11 +1,20 @@
 const { Sequelize } = require('sequelize');
 
-const connectDb = async () => {
-    const sequelize = new Sequelize(
-    'postgres://databaseuser:databasepassword@localhost:5432/PSP',
-    )
-    return sequelize;
+const database = {}
+
+database.sequelize = new Sequelize('postgres://databaseuser:databasepassword@localhost:5432/PSP')
+
+const authenticate = async () => {
+    try {
+        await database.sequelize.authenticate;
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
 }
 
-module.exports = { connectDb };
+database.auth = authenticate;
+
+module.exports = database;
 
