@@ -21,7 +21,7 @@ const Transaction = sequelize.define('Transaction', {
             allowNull: false,
         },
         card_last_digits: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         card_owner_name: {
@@ -33,7 +33,7 @@ const Transaction = sequelize.define('Transaction', {
             allowNull: false,
         },
         cvv: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
         },
 

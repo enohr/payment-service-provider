@@ -23,7 +23,7 @@ module.exports = {
             allowNull: false,
         },
         card_last_digits: {
-            type: Sequelize.DataTypes.INTEGER,
+            type: Sequelize.DataTypes.STRING,
             allowNull: false,
         },
         card_owner_name: {
@@ -35,7 +35,7 @@ module.exports = {
             allowNull: false,
         },
         cvv: {
-            type: Sequelize.DataTypes.INTEGER,
+            type: Sequelize.DataTypes.STRING,
             allowNull: false,
         },
         createdAt: Sequelize.DATE,
