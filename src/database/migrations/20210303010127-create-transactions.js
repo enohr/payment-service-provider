@@ -18,6 +18,10 @@ module.exports = {
             type: Sequelize.DataTypes.STRING,
             allowNull: false,
         },
+        cnpj_seller: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false,
+        },
         payment_method: {
             type: Sequelize.DataTypes.ENUM('debit', 'credit'),
             allowNull: false,

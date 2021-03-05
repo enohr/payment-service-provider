@@ -6,6 +6,7 @@ const server = require('../app');
 const FAKE_TRANSACTION = {
 	"transaction_description": "Celular",
 	"transaction_price": 1000,
+	"cnpj_seller": "68546956000127",
 	"payment_method": "debit",
 	"card_digits": "5118677470870117",
 	"card_owner_name": "Eduardo",
@@ -18,13 +19,31 @@ describe('Testing transactions routes', () => {
     it('Should create a new transaction', async () => {
         const expected = 201
         const response = await request(server).post('/transaction').send(FAKE_TRANSACTION);
+
         deepStrictEqual(response.status, expected);
     })
 
-	it.only('Should list all transactions', async () => {
-		const expected = 'Successfuly!'
+	it('Should save only last 4 digits of card number', async () => {
+		const expectedLength = 4;
+		const response = await request(server).post('/transaction').send(FAKE_TRANSACTION);
+
+		const cardDigitsLength = response.body.data.card_last_digits.length;
+
+		deepStrictEqual(cardDigitsLength, expectedLength);
+	})
+
+	it('Should list all transactions', async () => {
+		const expectedStatusCode = 200
 		const response = await request(server).get('/transaction')
 
-		deepStrictEqual(response.body.message, expected);
+		deepStrictEqual(response.status, expectedStatusCode);
+	})
+
+	it.only('Should list all transactions by given CNPJ', async () => {
+		const cnpj = "68546956000127";
+		const expectedLength = 2;
+		const response = await request(server).get(`/transaction/${cnpj}`);
+
+		deepStrictEqual(expectedLength, response.body.data.length);
 	})
 })

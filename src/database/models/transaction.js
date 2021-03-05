@@ -16,6 +16,10 @@ const Transaction = sequelize.define('Transaction', {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        cnpj_seller: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         payment_method: {
             type: DataTypes.ENUM('debit', 'credit'),
             allowNull: false,

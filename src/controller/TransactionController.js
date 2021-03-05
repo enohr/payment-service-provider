@@ -13,12 +13,20 @@ class TransactionController {
         }
 
         const transaction = await Transaction.create(user);
-        return res.status(201).json({message: 'Transaction created!'});
+        return res.status(201).json({message: 'Transaction created!', data: transaction});
     }
 
-    async list(req,res) {
+    async list(req, res) {
         const transactions = await Transaction.findAll();
-        return res.json({message: 'Successfuly!', data: transactions})
+        return res.status(200).json({message: 'Query Successfullly!', data: transactions})
+    }
+
+    async getByCnpj(req, res) {
+        const cnpj = req.params.cnpj
+        
+        const transactions = await Transaction.findAll({where: {cnpj_seller: cnpj}})
+
+        return res.status(200).json({message: 'Query successfully', data: transactions})
     }
 
 }
