@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/transaction/:cnpj', transactionController.getByCnpj);
+router.delete('/transaction/:id', transactionController.deleteById);
 router.post('/transaction', transactionController.store);
 router.get('/transaction', transactionController.list);
 

@@ -29,6 +29,17 @@ class TransactionController {
         return res.status(200).json({message: 'Query successfully', data: transactions})
     }
 
+    async deleteById(req, res) {
+        const { id } = req.params;
+
+        const deleted = await Transaction.destroy({where: {transaction_id: id}})
+
+        if (deleted) {
+            return res.status(200).json({message: 'Deleted'})
+        }
+        return res.status(404).json({error: 'transaction not found'})
+    }
+
 }
 
 module.exports = { TransactionController };

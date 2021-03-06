@@ -39,11 +39,21 @@ describe('Testing transactions routes', () => {
 		deepStrictEqual(response.status, expectedStatusCode);
 	})
 
-	it.only('Should list all transactions by given CNPJ', async () => {
+	it('Should list all transactions by given CNPJ', async () => {
 		const cnpj = "68546956000127";
 		const expectedLength = 2;
 		const response = await request(server).get(`/transaction/${cnpj}`);
 
-		deepStrictEqual(expectedLength, response.body.data.length);
+		deepStrictEqual(response.body.data.length, expectedLength);
 	})
+
+	it.only('Should delete transaction by given id', async() => {
+		const id = 4;
+		const status = 200;
+		const response = await request(server).delete(`/transaction/${id}`);
+
+		deepStrictEqual(response.status, status);
+	})
+
+
 })
