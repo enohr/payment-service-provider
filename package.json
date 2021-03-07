@@ -4,13 +4,16 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "nodemon src/server.js",
+    "server:dev": "nodemon src/server.js",
+    "queue:dev": "nodemon src/queue.js",
+    "start": "npm-run-all -p *:dev",
     "test": "jest -i"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bull": "^3.20.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
@@ -21,6 +24,7 @@
   },
   "devDependencies": {
     "jest": "^26.6.3",
+    "npm-run-all": "^4.1.5",
     "sequelize-cli": "^6.2.0",
     "supertest": "^6.1.3"
   }
