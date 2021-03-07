@@ -47,9 +47,17 @@ describe('Testing transactions routes', () => {
 		deepStrictEqual(response.body.data.length, expectedLength);
 	})
 
-	it.only('Should delete transaction by given id', async() => {
+	it('Should delete transaction by given id', async() => {
 		const id = 4;
 		const status = 200;
+		const response = await request(server).delete(`/transaction/${id}`);
+
+		deepStrictEqual(response.status, status);
+	})
+
+	it.only('Should not delete by wrong id', async() => {
+		const id = 0;
+		const status = 404;
 		const response = await request(server).delete(`/transaction/${id}`);
 
 		deepStrictEqual(response.status, status);
