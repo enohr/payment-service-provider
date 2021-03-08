@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../index')
 
-const Transaction = sequelize.define('Transaction', {
+const Transaction = sequelize.define('Transactions', {
         transaction_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,

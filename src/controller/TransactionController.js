@@ -1,4 +1,6 @@
 const { Transaction } = require('../database/models/transaction')
+const Queue = require('../lib/Queue')
+
 
 class TransactionController {
 
@@ -13,6 +15,9 @@ class TransactionController {
         }
 
         const transaction = await Transaction.create(user);
+
+        await Queue.add(transaction);
+
         return res.status(201).json({message: 'Transaction created!', data: transaction});
     }
 
