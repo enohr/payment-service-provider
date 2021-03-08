@@ -12,10 +12,6 @@ const Payable = sequelize.define('Payables', {
       },
       transaction_id: {
         type: DataTypes.INTEGER,
-        references: {
-          model: "Transaction", 
-          key: "transaction_id"
-        }
       },
       price: {
         type: DataTypes.INTEGER,
@@ -33,6 +29,10 @@ const Payable = sequelize.define('Payables', {
       timestamps: false,
   })
 
-Payable.belongsTo(Transaction)
+Payable.belongsTo(Transaction, {
+  foreignKey: 'transaction_id',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+})
 
 module.exports = {Payable}
