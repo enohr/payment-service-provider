@@ -1,5 +1,4 @@
-const { Payable } = require('../database/models/payable');
-const { Transaction } = require('../database/models/transaction');
+const { sumPayables } = require('../service/payableService')
 
 
 class PayableController {
@@ -7,23 +6,8 @@ class PayableController {
     async list(req, res) {
         const { cnpj } = req.params
 
-        const payablesDebit = await Payable.sum('price',
-            {where: { status: 'paid'},
-            include: {
-                model: Transaction,
-                attributes: [], // To exclude the pk of the included models
-                where: { cnpj_seller: cnpj } 
-            }
-        })
-
-        const payablesCredit = await Payable.sum('price',
-            {where: {status: 'waiting_funds'},
-            include: {
-                model: Transaction,
-                attributes: [], // To exclude the pk of the included models
-                where: { cnpj_seller: cnpj } 
-            }
-        })
+        const payablesDebit = await sumPayables('paid', cnpj);
+        const payablesCredit = await sumPayables('waiting_funds', cnpj);
 
         return res.json({message: 'Success', data: {sumPaid: payablesDebit, sumWaiting: payablesCredit}})
     }

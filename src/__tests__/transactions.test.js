@@ -1,5 +1,6 @@
 const request = require('supertest')
-const {  ok, deepStrictEqual } = require('assert');
+
+const { deleteTransaction, createTransaction } = require('../service/transactionService')
 
 const server = require('../app');
 
@@ -39,15 +40,15 @@ const FAKE_TRANSACTION_3 = {
 describe('Testing transactions routes', () => {
 	let transaction1, transaction2, transaction3;
 	beforeAll(async () => {
-		transaction1 = await request(server).post('/transaction').send(FAKE_TRANSACTION_1)
-		transaction2 = await request(server).post('/transaction').send(FAKE_TRANSACTION_2)
-		transaction3 = await request(server).post('/transaction').send(FAKE_TRANSACTION_3)
+		transaction1 = await createTransaction(FAKE_TRANSACTION_1);
+		transaction2 = await createTransaction(FAKE_TRANSACTION_2);
+		transaction3 = await createTransaction(FAKE_TRANSACTION_3);
 	})
 
 	afterAll(async () => {
-		await request(server).delete(`/transaction/${transaction1.body.data.transaction_id}`);
-		await request(server).delete(`/transaction/${transaction2.body.data.transaction_id}`);
-		await request(server).delete(`/transaction/${transaction3.body.data.transaction_id}`);
+		await deleteTransaction(transaction1.transaction_id);
+		await deleteTransaction(transaction2.transaction_id);
+		await deleteTransaction(transaction3.transaction_id);
 	})
 
     it('Should create a new transaction', async () => {
@@ -57,7 +58,7 @@ describe('Testing transactions routes', () => {
 
         expect(transactionCreated).toHaveProperty("transaction_id")
 
-		await request(server).delete(`/transaction/${transactionCreated.transaction_id}`)
+		await deleteTransaction(transactionCreated.transaction_id);
 
     })
 
@@ -69,7 +70,7 @@ describe('Testing transactions routes', () => {
 
 		expect(transactionCreated.card_last_digits).toHaveLength(expectedLength);
 
-		await request(server).delete(`/transaction/${transactionCreated.transaction_id}`)
+		await deleteTransaction(transactionCreated.transaction_id);
 	})
 
 	it('Should list all transactions', async () => {
@@ -97,8 +98,8 @@ describe('Testing transactions routes', () => {
 	})
 
 	it('Should delete transaction by given id', async() => {
-		const newTransaction = await request(server).post('/transaction').send(FAKE_TRANSACTION_1);
-		const response = await request(server).delete(`/transaction/${newTransaction.body.data.transaction_id}`);
+		const newTransaction = await createTransaction(FAKE_TRANSACTION_1);
+		const response = await request(server).delete(`/transaction/${newTransaction.transaction_id}`);
 
 		expect(response.status).toBe(200);
 	})
@@ -109,6 +110,4 @@ describe('Testing transactions routes', () => {
 
 		expect(response.status).toBe(404);
 	})
-
-
 })

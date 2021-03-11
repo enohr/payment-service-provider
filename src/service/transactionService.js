@@ -2,15 +2,16 @@ const { Transaction } = require('../database/models/transaction')
 
 
 const createTransaction = function(body) {
-    console.log(body.card_digits);
     const creditCardNumber = body.card_digits;
     const lastDigitsCard = creditCardNumber.slice(creditCardNumber.length - 4);
     
-    delete body.card_digits
     const transaction = {
         ...body,
         card_last_digits: lastDigitsCard
     }
+
+    delete transaction.card_digits
+
     return Transaction.create(transaction);
 }
 
