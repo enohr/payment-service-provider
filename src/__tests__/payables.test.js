@@ -1,8 +1,9 @@
 const request = require('supertest')
-const { deepStrictEqual } = require('assert');
 
+const Queue = require('../lib/Queue')
 const server = require('../app');
 const { calcFee, discountFee, checkCardType} = require('../helper/payable')
+const { deleteTransaction, createTransaction } = require('../service/transactionService')
 
 const FAKE_TRANSACTION_1 = {
 	"transaction_description": "Celular",
@@ -27,28 +28,18 @@ const FAKE_TRANSACTION_2 = {
 }
 
 
+
 describe('Test Payables Status', () => {
-	let transaction1, transaction2;
-	beforeAll(async () => {
-		transaction1 = await request(server).post('/transaction').send(FAKE_TRANSACTION_1)
-		transaction2 = await request(server).post('/transaction').send(FAKE_TRANSACTION_2)
-	})
-
-	afterAll(async () => {
-		await request(server).delete(`/transaction/${transaction1.body.data.transaction_id}`);
-		await request(server).delete(`/transaction/${transaction2.body.data.transaction_id}`);
-	})
-
     it('Should return paid as status on debit card', () => {
         const expectedCardType = 'paid';
         const cardType = checkCardType('debit');
-        deepStrictEqual(cardType, expectedCardType);
+        expect(cardType).toBe(expectedCardType);
     })
 
     it('Should return waiting_funds as status on credit card', () => {
         const expectedCardType = 'waiting_funds';
         const cardType = checkCardType('credit');
-        deepStrictEqual(cardType, expectedCardType);
+        expect(cardType).toBe(expectedCardType);
     })
 
 })
@@ -58,13 +49,13 @@ describe('Test Payables Fee', () => {
     it('Should return 3 as fee on debit card', () => {
         const expectedFee = 3
         const fee = calcFee('paid')
-        deepStrictEqual(fee, expectedFee);
+        expect(fee).toBe(expectedFee);
     })
 
     it('Should return 5 as fee on credit card', () => {
         const expectedFee = 5
         const fee = calcFee('waiting_funds')
-        deepStrictEqual(fee, expectedFee);
+        expect(fee).toBe(expectedFee);
     })
 })
 
@@ -74,22 +65,37 @@ describe('Test Payables Price', () => {
         const expectedPriceDiscounted = 970;
         const newPrice = discountFee('paid', price);
 
-        deepStrictEqual(newPrice, expectedPriceDiscounted);
+        expect(newPrice).toBe(expectedPriceDiscounted);
     })
     it('Should discount 5% on debit card', () => {
         const price = 1000
         const expectedPriceDiscounted = 950;
         const newPrice = discountFee('waiting_funds', price);
 
-        deepStrictEqual(newPrice, expectedPriceDiscounted);
+        expect(newPrice).toBe(expectedPriceDiscounted);
     })
 })
 
 describe('Test Balances of Payables', () => {
+    let transaction1, transaction2;
+    beforeAll(async () => {
+        Queue.process();
+        transaction1 = await createTransaction(FAKE_TRANSACTION_1);
+        transaction2 = await createTransaction(FAKE_TRANSACTION_2);
+        await Queue.add(transaction1);
+        await Queue.add(transaction2);
+    })
+
+    afterAll(async () => {
+        // await deleteTransaction(transaction1.transaction_id);
+        // await deleteTransaction(transaction2.transaction_id);
+    })
     it('Should return 200 as Status Code on valid CNPJ', async () => {
         const cnpj = "68546956000127"
         const balance = await request(server).get(`/payable/${cnpj}`)
 
-        deepStrictEqual(balance.status, 200)
+        console.log(balance.body.data);
+
+        expect(balance.body.data.sumPaid).not.toBe(null)
     })
 })
