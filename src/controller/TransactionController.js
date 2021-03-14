@@ -1,5 +1,6 @@
 const { createTransaction, deleteTransaction, listTransactions } = require('../service/transactionService')
-const Queue = require('../lib/Queue')
+const Queue = require('../lib/Queue');
+const { BaseError } = require('../error/BaseError');
 
 
 class TransactionController {
@@ -24,18 +25,20 @@ class TransactionController {
         return res.status(200).json({message: 'Query successfully', data: transactions})
     }
 
-    async deleteById(req, res) {
+    async deleteById(req, res, next) {
         try {
             const { id } = req.params;
 
             const deleted = await deleteTransaction(id)
 
-            if (deleted) {
-                return res.status(200).json({message: 'Deleted'})
+            if (!deleted) {
+                throw new BaseError(404, 'Transaction not found');
             }
-            return res.status(404).json({error: 'transaction not found'})
+            
+            return res.status(204).json({message: 'Deleted'})
+
         } catch (error) {
-            throw new Error(error.message);
+            next(error);
         }
     }
         

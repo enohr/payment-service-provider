@@ -87,14 +87,12 @@ describe('Test Balances of Payables', () => {
     })
 
     afterAll(async () => {
-        // await deleteTransaction(transaction1.transaction_id);
-        // await deleteTransaction(transaction2.transaction_id);
+        await deleteTransaction(transaction1.transaction_id);
+        await deleteTransaction(transaction2.transaction_id);
     })
     it('Should return 200 as Status Code on valid CNPJ', async () => {
         const cnpj = "68546956000127"
         const balance = await request(server).get(`/payable/${cnpj}`)
-
-        console.log(balance.body.data);
 
         expect(balance.body.data.sumPaid).not.toBe(null)
     })

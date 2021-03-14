@@ -17,7 +17,7 @@ const FAKE_TRANSACTION_1 = {
 
 const FAKE_TRANSACTION_2 = {
 	"transaction_description": "Book",
-	"transaction_price": 235,
+	"transaction_price": 1000,
 	"cnpj_seller": "68546956000127",
 	"payment_method": "credit",
 	"card_digits": "5118677470870117",
@@ -101,7 +101,7 @@ describe('Testing transactions routes', () => {
 		const newTransaction = await createTransaction(FAKE_TRANSACTION_1);
 		const response = await request(server).delete(`/transaction/${newTransaction.transaction_id}`);
 
-		expect(response.status).toBe(200);
+		expect(response.status).toBe(204);
 	})
 
 	it('Should not delete by wrong id', async() => {

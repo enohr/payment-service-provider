@@ -1,3 +1,4 @@
+const { BaseError } = require('../error/BaseError');
 const { Payable } = require('../database/models/payable')
 
 const { discountFee, calculatePaymentDate, checkCardType} = require('../helper/payable')
@@ -22,7 +23,7 @@ const PayableJob = {
     
             
         } catch(error) {
-            console.error(error);
+            throw new BaseError(500, error.message);
         }     
         
     }
