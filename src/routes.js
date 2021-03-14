@@ -10,7 +10,7 @@ const router = Router();
 
 router.get('/transaction/:cnpj', transactionController.getByCnpj);
 router.delete('/transaction/:id', transactionController.deleteById);
-router.post('/transaction', transactionController.store);
+router.post('/transaction', transactionController.validateRequest, transactionController.store);
 router.get('/transaction', transactionController.list);
 
 router.get('/payable/:cnpj', payableController.list);
