@@ -11,7 +11,7 @@ module.exports = {
             autoIncrement: true,
         },
         transaction_price: {
-            type: Sequelize.DataTypes.INTEGER,
+            type: Sequelize.DataTypes.REAL,
             allowNull: false,
         },
         transaction_description: {

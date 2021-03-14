@@ -9,7 +9,7 @@ const Transaction = sequelize.define('Transactions', {
             autoIncrement: true,
         },
         transaction_price: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.REAL,
             allowNull: false,
         },
         transaction_description: {

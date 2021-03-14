@@ -14,7 +14,7 @@ const Payable = sequelize.define('Payables', {
         type: DataTypes.INTEGER,
       },
       price: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.REAL,
         allowNull: false,
       },
       status: {
