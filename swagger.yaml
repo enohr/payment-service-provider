@@ -1,0 +1,203 @@
+swagger: "2.0"
+info: 
+  description: "Documentation of Payment Service Provider."
+  version: "1.0.0"
+  title: "Payment Service Provider Swagger"
+
+host: "localhost:3000"
+basePath: "/"
+
+paths: 
+  /transaction:
+    get:
+      tags:
+      - "Transaction"
+      summary: "List all transactions"
+      operationId: "list"
+      consume: 
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/TransactionResponse"
+    post:
+      tags:
+      - "Transaction"
+      summary: "Create a new transaction"
+      description: "Create and return a transaction"
+      operationId: "store"
+      consume: 
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        description: "Transaction that will be created"
+        required: true
+        schema:
+          $ref: "#/definitions/TransactionBody"
+        responses:
+          "201":
+            description: "Created"
+          "400"
+            description: "Error - Bad Request"
+
+  /transaction/{cnpj}:
+    get:            
+      tags:
+      - "Transaction"
+      summary: "List all transactions by specified cnpj"
+      description: "Returns a list of transactions"
+      operationId: "getByCnpj"
+      consume: 
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cnpj"
+        in: "path"
+        description: "CNPJ of seller"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            type: "array"
+            items: 
+              $ref: "#/definitions/TransactionResponse"
+  /transaction/{id}:
+    delete:
+      tags: 
+      - "Transaction"
+      summary: "Delete transaction by given id"
+      description: ""
+      operationId: "delete"
+      consume: 
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: 
+      - name: "id"
+        in: "path"
+        description: "ID of transaction"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "204":
+          description: "Deleted"
+        "404":
+          description: "Not found" 
+  /payable/{cnpj}:
+    get:            
+      tags:
+      - "Payable"
+      summary: "Get the sum of all payables of user"
+      description: "Returns a sum of payables by given user CNPJ"
+      operationId: "list"
+      consume: 
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cnpj"
+        in: "path"
+        description: "CNPJ of seller"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/PayableResponse"
+
+definitions:
+  TransactionResponse:
+    type: "object"
+    properties: 
+      message:
+        type: "string"
+        format: "string"
+      data:
+        type: "array"
+        items:
+              $ref: "#/definitions/Transaction"
+  Transaction:
+    type: "object"
+    properties:
+      transaction_id:
+        type: "integer"
+        format: "int64"
+      transaction_price:
+        type: "integer"
+        format: "int64"
+      transaction_description:
+        type: "string"
+        format: "string"
+      cnpj_seller:
+        type: "string"
+        format: "string"
+      payment_method:
+        type: "ENUM (debit, credit)"
+        format: "string"
+      card_last_digits:
+        type: "string"
+        format: "string"
+      card_owner_name:
+        type: "string"
+        format: "string"
+      card_valid_date:
+        type: "string"
+        format: "string"
+      cvv:
+        type: "string"
+        format: "string"
+  TransactionBody:
+    type: "object"
+    properties:
+      transaction_price:
+        type: "integer"
+        format: "int64"
+      transaction_description:
+        type: "string"
+        format: "string"
+      cnpj_seller:
+        type: "string"
+        format: "string"
+      payment_method:
+        type: "ENUM (debit, credit)"
+        format: "string"
+      card_digits:
+        type: "string"
+        format: "string"
+      card_owner_name:
+        type: "string"
+        format: "string"
+      card_valid_date:
+        type: "string"
+        format: "string"
+      cvv:
+        type: "string"
+        format: "string"
+  PayableResponse:
+    type: "object"
+    properties: 
+      message:
+        type: "string"
+        format: "string"
+      data:
+        type: "object"
+        properties:
+          sumPaid:
+            type: "integer"
+            format: "int64"
+          sumWaiting:
+            type: "integer"
+            format: "int64"
